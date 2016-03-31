@@ -1,12 +1,5 @@
-    Artificial chemistry low-level simulation
-    Make up our own rules of construction to simulate open-ended, creative evolution
-
-This is the motto of the OrganicBuilder, an application created by [Tim Hutton](http://www.sq3.org.uk).
-
-For more information, please visit [Organic Buidler website](https://bertranddechoux.github.io/OrganicBuilder/).
-
-You are welcome to watch, fork the project and create pull requests. Contact me if you have any questions.
-
+This project is based on **Organic Builder** (which is published under GNU General Public License) and extended only for academic purposes. 
+To see the original source code and author, please visit [here](https://github.com/BertrandDechoux/OrganicBuilder/).
 
 **Compile and run the tests**
 ```
