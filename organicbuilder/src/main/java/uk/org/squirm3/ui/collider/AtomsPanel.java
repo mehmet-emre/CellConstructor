@@ -30,6 +30,7 @@ import uk.org.squirm3.model.Configuration;
 import uk.org.squirm3.model.DraggingPoint;
 import uk.org.squirm3.model.type.AtomType;
 import uk.org.squirm3.model.type.def.BasicType;
+import uk.org.squirm3.ui.GUI;
 
 public class AtomsPanel extends JScrollPane {
     private static final long serialVersionUID = 1L;

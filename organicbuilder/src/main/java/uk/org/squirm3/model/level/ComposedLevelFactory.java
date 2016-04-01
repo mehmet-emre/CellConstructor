@@ -6,7 +6,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.ResourceLoader;
 
 import uk.org.squirm3.engine.generator.AtomBuilder;
-import uk.org.squirm3.engine.generator.AtomBuilderGonstructor;
+import uk.org.squirm3.engine.generator.AtomBuilderConstructor;
 import uk.org.squirm3.engine.generator.LevelConstructor;
 
 public class ComposedLevelFactory implements ResourceLoaderAware {
@@ -39,7 +39,7 @@ public class ComposedLevelFactory implements ResourceLoaderAware {
         final String levelDescription = conversionService.convert(
                 resourceLoader.getResource("classpath:levels/" + map),
                 String.class);
-        final LevelConstructor levelConstructo = new AtomBuilderGonstructor(
+        final LevelConstructor levelConstructo = new AtomBuilderConstructor(
                 levelDescription, atomBuilder);
         final LevelMessages messages = new LevelMessages(key, messageSource);
         return new ComposedLevel(levelConstructo, messages, atomValidator);

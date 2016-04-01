@@ -16,6 +16,7 @@ import org.springframework.context.MessageSource;
 import uk.org.squirm3.springframework.Messages;
 import uk.org.squirm3.ui.collider.AtomsPanel;
 import uk.org.squirm3.ui.level.CurrentLevelPanel;
+import uk.org.squirm3.ui.plotter.PlotterPanel;
 import uk.org.squirm3.ui.reaction.ReactionConstructorPanel;
 import uk.org.squirm3.ui.reaction.ReactionListPanel;
 import uk.org.squirm3.ui.toolbar.ToolBarPanel;
@@ -25,7 +26,13 @@ import uk.org.squirm3.ui.toolbar.ToolBarPanel;
  * within a layout.
  */
 public class GUI {
+    
+    final private static PlotterPanel plotter = new PlotterPanel();
 
+    public static PlotterPanel getPlotter() {
+        return plotter;
+    }
+    
     public GUI(final MessageSource messageSource,
             final CurrentLevelPanel currentLevelPanel,
             final ReactionListPanel reactionListPanel,
@@ -37,10 +44,11 @@ public class GUI {
         final JSplitPane rootComponent = buildRootComponent(collisionsPanel,
                 currentLevelPanel, reactionsPane);
         final JPanel contentPane = buildContentPane(toolBarPanel, rootComponent);
+        buildPlotter();
         buildMainFrame(messageSource, contentPane);
     }
 
-    /**
+	/**
      * Bottom-left component.
      */
     private JSplitPane createReactionsPane(
@@ -104,4 +112,12 @@ public class GUI {
         frame.setVisible(true);
     }
 
+    private void buildPlotter() {
+        final JFrame frame = new JFrame("Plotter");
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.add(plotter);
+//        frame.setContentPane(contentPane);
+//        SwingUtilities.updateComponentTreeUI(frame);
+        frame.setVisible(true);
+	}
 }

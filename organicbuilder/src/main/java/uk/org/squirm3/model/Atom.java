@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import uk.org.squirm3.model.type.AtomType;
 import uk.org.squirm3.model.type.def.SpecialType;
+import uk.org.squirm3.ui.GUI;
 
 public class Atom {
     // TODO should not be hardcoded, properties file ?
@@ -88,6 +89,11 @@ public class Atom {
     }
 
     public void setState(final int state) {
+        
+        if (this.state != state) {
+            GUI.getPlotter().refresh();
+        }
+        
         this.state = state;
     }
 

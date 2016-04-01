@@ -2,12 +2,12 @@ package uk.org.squirm3.engine.generator;
 
 import uk.org.squirm3.model.Configuration;
 
-public class AtomBuilderGonstructor implements LevelConstructor {
+public class AtomBuilderConstructor implements LevelConstructor {
 
     private final String levelDescription;
     private final AtomBuilder atomBuilder;
 
-    public AtomBuilderGonstructor(final String levelDescription,
+    public AtomBuilderConstructor(final String levelDescription,
             final AtomBuilder atomBuilder) {
         this.levelDescription = levelDescription;
         this.atomBuilder = atomBuilder;
