@@ -1,12 +1,11 @@
 package uk.org.squirm3.ui.reaction;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.util.Collections;
 
@@ -41,14 +40,14 @@ public class ReactionConstructorPanel extends JPanel {
     private JComboBox<?> aState, bState, futureAState, futureBState;
     private JLabel futureAType, futureBType;
     private JButton addReaction;
-    
+
     private JTextField probability;
-    
+
     private final MessageSource messageSource;
 
     public ReactionConstructorPanel(final ApplicationEngine applicationEngine,
             final MessageSource messageSource, final ImageIcon addIcon) {
-    	this.messageSource = messageSource;
+        this.messageSource = messageSource;
         setupLayoutAndBorder();
         final ActionListener updateReactionListener = new UpdateReactionListener();
         setupReactionForm(updateReactionListener);
@@ -73,45 +72,34 @@ public class ReactionConstructorPanel extends JPanel {
                 reactionForm);
         bType = createTypeComboBox(updateReactionListener, reactionForm);
         bState = createStateComboBox(updateReactionListener, reactionForm);
-        probability = createProbabilityText(updateReactionListener, reactionForm);
         createJLabel(" => ", reactionForm);
         futureAType = createJLabel("", reactionForm);
         futureAState = createStateComboBox(updateReactionListener, reactionForm);
         bondedAfter = createBondedCheckBox(updateReactionListener, reactionForm);
         futureBType = createJLabel("", reactionForm);
         futureBState = createStateComboBox(updateReactionListener, reactionForm);
+        probability = createProbabilityText(updateReactionListener,
+                reactionForm);
         add(reactionForm);
     }
 
-    private JTextField createProbabilityText(final ActionListener actionListener, JPanel parent) {
-    	 final JTextField jText = new JTextField(5);
-    	 jText.setText("1");
-    	 jText.setToolTipText(Messages.localize("probability.add.tooltip",
-                 messageSource));
-    	 jText.addKeyListener( new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				addReaction.setText(createReactionFromEditor().toString());
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-		} );
-    	 jText.addActionListener(actionListener);
-         parent.add(jText);
-         return jText;
-	}
+    private JTextField createProbabilityText(
+            final ActionListener actionListener, JPanel parent) {
+        final JTextField jText = new JTextField(5);
+        jText.setText("1");
+        jText.setToolTipText(Messages.localize("probability.add.tooltip",
+                messageSource));
+        jText.addActionListener(actionListener);
+        parent.add(jText);
+        return jText;
+    }
 
-	private void setupAddReactionButton(
-            final ApplicationEngine applicationEngine,
-            final ImageIcon addIcon) {
+    private void setupAddReactionButton(
+            final ApplicationEngine applicationEngine, final ImageIcon addIcon) {
         addReaction = new JButton(addIcon);
+//        addReaction.setMinimumSize(new Dimension(100, 20));
+        addReaction.setPreferredSize(new Dimension(100, 20));
+//        addReaction.setSize(100, 20);
         addReaction.setMargin(new Insets(0, 0, 0, 0));
         addReaction.setToolTipText(Messages.localize("reactions.add.tooltip",
                 messageSource));
@@ -126,14 +114,18 @@ public class ReactionConstructorPanel extends JPanel {
     }
 
     private Reaction createReactionFromEditor() {
-    	
-    	BigDecimal probabilityRate = null;
-    	try {
-    		probabilityRate = new BigDecimal(probability.getText());
-    	} catch (Exception e) {
-    		probabilityRate = new BigDecimal("1");
-    	}
-    	
+
+        double probabilityRate = 1;
+        try {
+            probabilityRate = Double.parseDouble(probability.getText());
+        } finally {
+            if (probabilityRate > 1) {
+                probabilityRate = 1;
+            } else if (probabilityRate < 0) {
+                probabilityRate = 0;
+            }
+        }
+
         return new Reaction((ReactionType) aType.getSelectedItem(),
                 aState.getSelectedIndex(), bondedBefore.isSelected(),
                 (ReactionType) bType.getSelectedItem(),
@@ -182,15 +174,16 @@ public class ReactionConstructorPanel extends JPanel {
     private final class UpdateReactionListener implements ActionListener {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            futureAType.setText(toStringIdentifier((ReactionType)aType.getSelectedItem()));
-            futureBType.setText(toStringIdentifier((ReactionType)bType.getSelectedItem()));
-            addReaction.setText(createReactionFromEditor().toString());
+            futureAType.setText(toStringIdentifier((ReactionType) aType
+                    .getSelectedItem()));
+            futureBType.setText(toStringIdentifier((ReactionType) bType
+                    .getSelectedItem()));
+            addReaction.setText(createReactionFromEditor().toStringForButton());
         }
     }
 
-    private static final class ReactionTypeListCellRenderer
-            implements
-                ListCellRenderer<ReactionType> {
+    private static final class ReactionTypeListCellRenderer implements
+            ListCellRenderer<ReactionType> {
         @Override
         public Component getListCellRendererComponent(
                 final JList<? extends ReactionType> list,
