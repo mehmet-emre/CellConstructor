@@ -3,6 +3,8 @@ package uk.org.squirm3.engine;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.swing.JComboBox;
+
 import uk.org.squirm3.listener.EventDispatcher;
 import uk.org.squirm3.listener.Listener;
 import uk.org.squirm3.model.Atom;
@@ -29,6 +31,8 @@ public class ApplicationEngine {
 
     private final EventDispatcher<ApplicationEngineEvent> eventDispatcher;
     private Configuration configuration;
+    
+    private JComboBox<Atom> atomTypeList = new JComboBox<>();
 
     public ApplicationEngine(final LevelManager levelManager) throws Exception {
         // load levels
@@ -41,6 +45,7 @@ public class ApplicationEngine {
         try {
             setLevel(0);
         } catch (final Exception e) {
+            System.out.println(e);
         }
         commands = new LinkedList<ICommand>();
         colliderExecution = new Object();
@@ -186,6 +191,20 @@ public class ApplicationEngine {
         collider = new Collider(configuration);
         eventDispatcher.dispatchEvent(ApplicationEngineEvent.CONFIGURATION);
         eventDispatcher.dispatchEvent(ApplicationEngineEvent.ATOMS);
+        
+        atomTypeList.removeAllItems();
+        outer:
+        for(Atom a: collider.getAtoms()) {
+            for(int i = 0; i < atomTypeList.getItemCount(); i++) {
+                Atom temp = atomTypeList.getItemAt(i);
+                if (a.getType().toString().equals(temp.getType().toString()) &&
+                    a.getState() == temp.getState()) {
+                    continue outer;
+                }
+            }
+            atomTypeList.addItem(a);
+        }
+//        atomTypeList.repaint();
     }
 
     public void restartLevel() {
@@ -324,4 +343,23 @@ public class ApplicationEngine {
         }
     }
 
+    public JComboBox<Atom> getAtomTypeList() {
+        return atomTypeList;
+    }
+
+    public void setAtomTypeList(JComboBox<Atom> atomTypeList) {
+        this.atomTypeList = atomTypeList;
+    }
+
+    public void setAtomSize(String s, int i, double size) {
+        System.out.println("TYPEE:" + s + ", STATEE:" + i + ", SIZEE:" + Double.toString(size));
+        
+        for(Atom a: collider.getAtoms()) {
+            if (a.getType().toString().equals(s) &&
+                a.getState() == i) {
+                a.setSize(size);
+            }
+        }
+    }
+    
 }

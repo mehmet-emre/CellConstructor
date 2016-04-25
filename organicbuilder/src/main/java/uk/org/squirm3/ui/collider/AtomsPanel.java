@@ -158,7 +158,7 @@ public class AtomsPanel extends JScrollPane {
             return;
         }
         needRepaint = false;
-        final int R = (int) Atom.getAtomSize();
+//        final int R = (int) Atom.getAtomSize(); XXX Emre
         // to avoid the array to be changed (multithreading issue maybe later)
         final Atom[] atoms = latestAtomsCopy;
 
@@ -185,13 +185,14 @@ public class AtomsPanel extends JScrollPane {
 
         // draw the atoms themselves
         g2.setStroke(new BasicStroke(4));
-        g2.setFont(new Font("Arial", Font.BOLD, R));
+        g2.setFont(new Font("Arial", Font.BOLD, (int)Atom.getAtomSize())); // XXX EMre
         g2.setPaint(Color.black);
         if (atoms != null) {
-            final int offset_x = R;
-            final int offset_y = R;
-            final int text_offset_y = (int) (R * 8.0 / 22.0);
             for (int i = 0; i < atoms.length; i++) {
+                final int R = (int) atoms[i].getSize(); // XXX EMRE
+                final int text_offset_y = (int) (R * 8.0 / 22.0);
+                final int offset_x = R;
+                final int offset_y = R;
                 if (!atoms[i].isKiller()) {
                     // draw the normal colour atom image and label it
                     g2.drawImage(atomsImages.get(atoms[i].getType()),
@@ -219,6 +220,7 @@ public class AtomsPanel extends JScrollPane {
         if (atoms != null) {
             for (final Atom atom : atoms) {
                 final Iterator<Atom> it = atom.getBonds().iterator();
+                final int R = (int) atom.getSize(); // XXX EMRE
                 while (it.hasNext()) {
                     final Atom other = it.next();
                     final float x1 = atom.getPhysicalPoint().getPositionX();

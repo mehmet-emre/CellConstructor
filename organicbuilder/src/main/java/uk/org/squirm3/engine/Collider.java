@@ -136,13 +136,21 @@ final class Collider {
         // TODO the collider should not be responsible for the mangement of
         // reactions
 
-        final float R = Atom.getAtomSize();
-        final float diam = 2.0f * R;
-        final float diam2 = diam * diam;
+//        final float R = Atom.getAtomSize();
+//        final float diam = 2.0f * R;
+//        final float diam2 = diam * diam;
 
         for (int i = 0; i < atoms.size(); i++) {
+            
             Atom a = atoms.get(i);
-            // bounce off the walls
+            // XXX EMRE
+            final float R = a.getFloatSize();
+            final float diam = 2.0f * R;
+            final float diam2 = diam * diam;
+            
+            /*
+             * bounce off the walls
+             */
             if (a.getPhysicalPoint().getPositionX() < R) {
                 a.getPhysicalPoint().setSpeedX(
                         a.getPhysicalPoint().getSpeedX()
@@ -167,7 +175,9 @@ final class Collider {
                                 - getForce(a.getPhysicalPoint().getPositionY()
                                         - (height - R)));
             }
-            // bounce off other atoms that are within 2R distance of this one
+            /*
+             * bounce off other atoms that are within 2R distance of this one
+             */
             // what square radius must we search for neighbours?
             final int rx = (int) Math.ceil(diam / bucket_width);
             final int ry = (int) Math.ceil(diam / bucket_height);

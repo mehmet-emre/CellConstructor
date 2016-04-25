@@ -18,6 +18,11 @@ public class PlotterPanel extends JPanel {
     int[] data = { 1, 2 ,3 };
     final int PAD = 20;
     
+    /**
+     * i need the type of elements..
+     * and their initial numbers...
+     */
+    
     int i = 4;
     int lastUpdatedIndex = 0;
     int lastUpdatedValue = 0;

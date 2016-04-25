@@ -16,6 +16,7 @@ import org.springframework.context.MessageSource;
 import uk.org.squirm3.springframework.Messages;
 import uk.org.squirm3.ui.collider.AtomsPanel;
 import uk.org.squirm3.ui.level.CurrentLevelPanel;
+import uk.org.squirm3.ui.molecule.MoleculePanel;
 import uk.org.squirm3.ui.plotter.PlotterPanel;
 import uk.org.squirm3.ui.reaction.ReactionConstructorPanel;
 import uk.org.squirm3.ui.reaction.ReactionListPanel;
@@ -37,9 +38,10 @@ public class GUI {
             final CurrentLevelPanel currentLevelPanel,
             final ReactionListPanel reactionListPanel,
             final ReactionConstructorPanel reactionConstructorPanel,
-            final AtomsPanel collisionsPanel, final ToolBarPanel toolBarPanel) {
+            final AtomsPanel collisionsPanel, final ToolBarPanel toolBarPanel,
+            final MoleculePanel moleculePanel) {
 
-        final JSplitPane reactionsPane = createReactionsPane(reactionListPanel,
+        final JSplitPane reactionsPane = createReactionsPane(moleculePanel, reactionListPanel,
                 reactionConstructorPanel);
         final JSplitPane rootComponent = buildRootComponent(collisionsPanel,
                 currentLevelPanel, reactionsPane);
@@ -52,10 +54,15 @@ public class GUI {
      * Bottom-left component.
      */
     private JSplitPane createReactionsPane(
+            final MoleculePanel moleculePanel,
             final ReactionListPanel reactionListPanel,
             final ReactionConstructorPanel reactionConstructorPanel) {
+        final JSplitPane moleculePane = new JSplitPane(
+                JSplitPane.VERTICAL_SPLIT, true, moleculePanel,
+                reactionConstructorPanel);
+        moleculePane.setOneTouchExpandable(true);
         final JSplitPane reactionsPane = new JSplitPane(
-                JSplitPane.VERTICAL_SPLIT, true, reactionConstructorPanel,
+                JSplitPane.VERTICAL_SPLIT, true, moleculePane,
                 reactionListPanel);
         reactionsPane.addPropertyChangeListener(new PropertyChangeListener() {
             @Override

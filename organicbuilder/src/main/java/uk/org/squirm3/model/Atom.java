@@ -15,13 +15,16 @@ public class Atom {
     private int state;
     private final AtomType type;
     private final LinkedList<Atom> bonds;
+    
+    private double size;
 
     public Atom(final IPhysicalPoint iPhysicalPoint, final AtomType type,
-            final int state) {
+            final int state, final double size) {
         this.iPhysicalPoint = iPhysicalPoint.copy();
         this.type = type;
         this.state = state;
         bonds = new LinkedList<Atom>();
+        this.size = size;
     }
 
     public void bondWith(final Atom other) {
@@ -113,4 +116,15 @@ public class Atom {
         return R;
     }
 
+    public float getFloatSize() {
+        return Float.valueOf(Double.toString(getSize()));
+    }
+    
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
 }
